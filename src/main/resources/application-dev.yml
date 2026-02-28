@@ -1,0 +1,11 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://mehrotraaishwarya01_db_user:F1BJjQUoHXcYC928@cluster0.luxopoq.mongodb.net/?appName=Cluster0
+      database: journaldb
+      authenticationDatabase: true
+
+server:
+  port: 8080
+  servlet:
+    context-path: /journal

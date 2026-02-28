@@ -1,0 +1,25 @@
+package com.aishwarya.journalApp;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.mongodb.MongoDatabaseFactory;
+import org.springframework.data.mongodb.MongoTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+@SpringBootApplication
+@EnableTransactionManagement
+public class JournalAppApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(JournalAppApplication.class, args);
+	}
+
+//   // MongoDatabaseFactory helps in creating connecting with the database , create db sessions
+	@Bean
+	public PlatformTransactionManager getPlatformTransactionManager(MongoDatabaseFactory mongoDatabaseFactory){
+		return new MongoTransactionManager(mongoDatabaseFactory);
+	}
+
+}
