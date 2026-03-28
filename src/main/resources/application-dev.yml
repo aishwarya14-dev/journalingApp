@@ -1,9 +1,48 @@
 spring:
+  redis:
+    host: redis://default:1amdrmU3fFNxag0ycSjrWXvFdttorbDP@redis-10713.crce292.ap-south-1-2.ec2.cloud.redislabs.com:10713
+    port: 6379
   data:
     mongodb:
       uri: mongodb+srv://mehrotraaishwarya01_db_user:F1BJjQUoHXcYC928@cluster0.luxopoq.mongodb.net/?appName=Cluster0
       database: journaldb
       authenticationDatabase: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: mehrotraa965@gmail.com
+    password: bcyz twti evts nhxk
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVERS}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: weekly-sentiment-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: com.aishwarya.journalApp.model
+    properties:
+      security:
+        protocol: SASL_SSL
+      sasl:
+        mechanism: PLAIN
+        jaas:
+          config: org.apache.kafka.common.security.plain.PlainLoginModule required username='X' password='X';
+      session:
+        timeout:
+          ms: 45000
 
 server:
   port: 8080

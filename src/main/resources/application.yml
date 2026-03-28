@@ -7,3 +7,7 @@ logging:
     net:
       aishwarya:
         journalApp: DEBUG
+
+weather:
+  api:
+    key: 9e952f80685f7d100ac52f16ce4c4cc6

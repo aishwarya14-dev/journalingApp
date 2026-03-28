@@ -1,6 +1,8 @@
 package com.aishwarya.journalApp.config;
 
+import com.aishwarya.journalApp.filter.JwtFilter;
 import com.aishwarya.journalApp.service.CustomUserDetailsServiceImpl;
+import jakarta.servlet.Filter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -22,19 +25,25 @@ public class SpringSecurity {
     @Autowired
     private CustomUserDetailsServiceImpl customUserDetailsService;
 
+    @Autowired
+    private JwtFilter jwtFilter;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth ->
-                    auth.requestMatchers("/journal/**","/user/**").authenticated()
-                            .requestMatchers("/public/**").permitAll()
-                            .requestMatchers("/admin/**").hasRole("ADMIN")
+                        auth.requestMatchers("/public/**", "/journal/**","/v3/api-docs/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html").permitAll()
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/journal/**", "/user/**").authenticated()
                             .anyRequest().permitAll()
-                ).httpBasic(Customizer.withDefaults())
+                )
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
+        httpSecurity.addFilterBefore( jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 
@@ -50,5 +59,10 @@ public class SpringSecurity {
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+
+//    @Bean
+//    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+//        return config.getAuthenticationManager();
+//    }
 
 }
